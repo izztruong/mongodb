@@ -38,6 +38,57 @@ app.get('/', async (req, res) => {
         list: newListsp
     })
 })
+app.get("/update_sv", async (request, response) => {
+
+    await mongoose.connect(uri).then(console.log('Ket noi DB thanh cong.'));
+
+    try {
+        var kq = await svModel.updateOne({name: 'Nguyễn Văn A'}, {name: 'Nguyễn Văn B', tuoi: 25});
+
+        console.log(kq);
+
+        //await sv.save();
+        response.send(kq);
+    } catch (error) {
+        response.status(500).send(error);
+    }
+});
+
+app.get("/xoa_sv", async (request, response) => {
+
+    await mongoose.connect(uri).then(console.log('Ket noi DB thanh cong.'));
+
+    try {
+        var kq = await svModel.findOneAndRemove({name: 'Nguyễn Văn A'});
+
+        console.log(kq);
+
+        //await sv.save();
+        response.send(kq);
+    } catch (error) {
+        response.status(500).send(error);
+    }
+});
+
+app.get("/add_sv", async (request, response) => {
+
+    await mongoose.connect(uri).then(console.log('Ket noi DB thanh cong.'));
+
+    let sv = new svModel({
+        name: 'Nguyễn văn B',
+        tuoi: 22
+    });
+
+    sv.diachi = 'BG';
+
+    try {
+        console.log(sv);
+        await sv.save();
+        response.send(sv);
+    } catch (error) {
+        response.status(500).send(error);
+    }
+});
 
 
 app.listen(3000);
